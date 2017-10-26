@@ -1,0 +1,6 @@
+#cat .gitigore
+.DS_Store
+*.DS_Store
+*.coffee
+.idea/
+node_modules/*
