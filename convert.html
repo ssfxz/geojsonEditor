@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>行政区域图</title>
+	<script type="text/javascript" src="./geojson.js"></script>
+	<script type="text/javascript" src="./lib/FileSaver.js"></script>
+</head>
+
+<body>
+  	<input type="button" value="Convert 2 Geojson" onclick="geojson();" />
+	<script type="text/javascript">
+
+		function Mercator2lonLat(polygon, isLine) {
+			var points = isLine ? polygon : polygon[0];
+			var newPoints = points.map(point => {
+				var x = point[0];
+				var y = point[1];
+				x = x / 20037508.34 * 180;
+				y = y / 20037508.34 * 180;
+				y = 180 / Math.PI * (2 * Math.atan(Math.exp(y * Math.PI / 180)) - Math.PI / 2);
+				return [x, y];
+			});
+			polygon[0] = newPoints;
+			if (isLine) polygon = newPoints;
+			return polygon;
+		}
+
+		function geojson() {
+			var features = data.features.map(feature => {
+				if (feature.geometry.type == "Polygon") {
+					var polygon = feature.geometry.coordinates;
+					feature.geometry.coordinates = Mercator2lonLat(polygon);
+				}
+				else if (feature.geometry.type == "MultiPolygon") {
+					var polygons = feature.geometry.coordinates;
+					feature.geometry.coordinates = polygons.map(polygon => Mercator2lonLat(polygon));
+				}
+				else if (feature.geometry.type == "MultiLineString") {
+					var lines = feature.geometry.coordinates;
+					feature.geometry.coordinates = lines.map(line => Mercator2lonLat(line, true));
+				}
+				return feature;
+			});
+
+			var geoObj = {
+				"type": "FeatureCollection",
+				"features": features
+			};
+
+			console.log(geoObj);
+			var geoStr = JSON.stringify(geoObj);
+			// console.log(geoStr);
+
+			var blob = new Blob([geoStr], {
+				type: 'application/json'
+			});
+			saveAs(blob, "geojson.json");
+		}
+
+	</script>
+</body>
+
+</html>

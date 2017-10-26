@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Draw and Modify Features</title>
+    <title>GeoJson Editor</title>
     <link rel="stylesheet" href="./lib/ol.css" type="text/css">
     <script src="./lib/ol-debug.js"></script>
     <script type="text/javascript" src="./lib/FileSaver.js"></script>
@@ -15,7 +15,7 @@
       });
 
       var source = new ol.source.Vector({
-          url: './map.geojson',
+          url: './geojson.json',
           format: new ol.format.GeoJSON(),
           wrapX: false
       });
@@ -38,7 +38,8 @@
         layers: [raster, vector],
         target: 'map',
         view: new ol.View({
-          center: [12000000, 4000000],
+          projection: 'EPSG:4326',
+          center: [108,30],
           zoom: 4
         })
       });
