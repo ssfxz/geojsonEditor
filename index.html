@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Draw and Modify Features</title>
+    <link rel="stylesheet" href="./lib/ol.css" type="text/css">
+    <script src="./lib/ol-debug.js"></script>
+    <script type="text/javascript" src="./lib/FileSaver.js"></script>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <input type="button" value="Export Geojson" onclick="exportGeojson();" />
+    <script>
+      var raster = new ol.layer.Tile({
+        source: new ol.source.OSM()
+      });
+
+      var source = new ol.source.Vector({
+          url: './map.geojson',
+          format: new ol.format.GeoJSON(),
+          wrapX: false
+      });
+
+      var vector = new ol.layer.Vector({
+        source: source,
+      });
+
+      var select = new ol.interaction.Select({
+        wrapX: false
+      });
+
+      var modify = new ol.interaction.Modify({
+        features: select.getFeatures(),
+      });
+
+      var snap = new ol.interaction.Snap({source: source});
+
+      var map = new ol.Map({
+        layers: [raster, vector],
+        target: 'map',
+        view: new ol.View({
+          center: [12000000, 4000000],
+          zoom: 4
+        })
+      });
+
+      map.addInteraction(select);
+      map.addInteraction(modify);
+      map.addInteraction(snap);
+
+      function exportGeojson() {
+        var features = source.getFeatures();
+        var geoStr = ol.format.GeoJSON.prototype.writeFeatures(features);
+
+        var blob = new Blob([geoStr], {
+          type: 'application/json'
+        });
+        saveAs(blob, "geojson.json");
+      }
+    </script>
+  </body>
+</html>

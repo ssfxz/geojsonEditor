@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.21.0",
+    "ejs": "^2.5.2",
+    "express": "^4.14.0",
+    "mysql": "^2.11.1",
+    "react-dnd": "^2.5.4",
+    "react-dnd-html5-backend": "^2.5.4",
+    "sequelize": "^3.24.3"
+  },
+  "devDependencies": {
+    "jQuery": "^1.7.4",
+    "request": "^2.83.0"
+  }
+}
