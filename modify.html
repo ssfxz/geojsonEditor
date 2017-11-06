@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>行政区域图</title>
+	<script type="text/javascript" src="./geojson.js"></script>
+	<script type="text/javascript" src="./lib/FileSaver.js"></script>
+</head>
+
+<body>
+  	<input type="button" value="modify" onclick="modify();" />
+	<script type="text/javascript">
+
+		function modify() {
+			var features = data.features.map(feature => {
+				item = {
+					type: "Feature",
+					properties: feature.properties,
+					geometry: feature.geometry
+				};
+				return item;
+			});
+
+			var geoObj = {
+				"type": "FeatureCollection",
+				"features": features
+			};
+
+			var geoStr = JSON.stringify(geoObj);
+
+			var blob = new Blob([geoStr], {
+				type: 'application/json'
+			});
+			saveAs(blob, "geojson.json");
+		}
+
+	</script>
+</body>
+
+</html>
