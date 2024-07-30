@@ -5,6 +5,11 @@ var path = require('path');
 var request = require('request');
 
 var server = http.createServer(function(req, res) {
+    if (path.normalize(decodeURI(req.url)) !== decodeURI(req.url)) {
+        res.statusCode = 403;
+        res.end();
+        return;
+    }
     var staticUrl = path.join(__dirname + req.url);
     try {
         switch (req.url) {
